@@ -1,0 +1,12 @@
+{
+  "extends": "airbnb",
+  "rules": {
+    "func-names": ["error", "never"],
+    "jsx-a11y/href-no-hash": "off",
+    "jsx-a11y/anchor-is-valid": ["warn", { "aspects": ["invalidHref"] }],
+    "global-require": 0,
+    "no-unused-expressions": 0,
+    "import/no-dynamic-require": 0,
+    "linebreak-style": 0
+  }
+}
