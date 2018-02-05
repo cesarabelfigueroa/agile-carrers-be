@@ -127,18 +127,7 @@ const removeAddressFromUser = async (request, reply) => {
 
 const updateUser = async (request, reply) => {
   try {
-    const user = await models.user.update({
-      email: request.payload.email,
-      name: request.payload.name,
-      updatedAt: Date.now(),
-      type: request.payload.type !== '' ? request.payload.type : 'customer',
-    }, {
-      where: {
-        id: request.params.id,
-      },
-      raw: true,
-    });
-    return reply(user);
+    return reply('user');
   } catch (error) {
     return reply(boom.badData(`Could not update user: ${error}`));
   }

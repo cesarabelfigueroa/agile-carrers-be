@@ -1,5 +1,6 @@
 import fs from 'fs';
 import path from 'path';
+import _ from 'lodash';
 import Sequelize from 'sequelize';
 import config from '../config/config';
 
@@ -23,8 +24,8 @@ const sequelize = process.env.DATABASE_URL ?
     pool: {
       max: 5,
       min: 0,
-      idle: 10000,
-      maxIdleTime: 120000
+      idle: 20000,
+      acquire: 20000,
     },
     "dialectOptions": {
       "ssl": true
@@ -39,13 +40,14 @@ sequelize
   .authenticate()
   .then(() => {
     console.log('Connection has been established successfully.');
+    sequelize.sync({force: true});
   })
   .catch((err) => {
     console.error('Unable to connect to the database:', err);
   });
 
 
-fs.readdirSync(__dirname)
+fs.readdirSync(__dirname) 
   .filter(file => (file.indexOf('.') !== 0) && (file !== basename) && (file.slice(-3) === '.js'))
   .forEach((file) => {
 
@@ -53,7 +55,15 @@ fs.readdirSync(__dirname)
     db[model.name] = model;
   });
 
+
+_.forEach(db, function(model){
+  if(_.has(model, 'associate')){model.associate(db);}
+});
+
 db.sequelize = sequelize;
 db.Sequelize = Sequelize;
+
+
+
 
 module.exports = db;
